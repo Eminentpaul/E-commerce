@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+
+{% block content %}
+	
+
+<section class="section-content padding-y bg">
+<div class="container">
+
+<!-- ============================ COMPONENT 1 ================================= -->
+
+<div class="row">
+	<aside class="col-lg-9">
+<div class="card">
+<table class="table table-borderless table-shopping-cart">
+<thead class="text-muted">
+<tr class="small text-uppercase">
+	{% if cart_items.count %}
+  <th scope="col">Product</th>
+  <th scope="col" width="120">Quantity</th>
+  <th scope="col" width="120">Price</th>
+  <th scope="col" class="text-right" width="200"> </th>
+</tr>
+</thead>
+<tbody>
+
+
+
+	{% for item  in cart_items %}
+	<tr>
+	<td>
+		<figure class="itemside align-items-center">
+			<div class="aside"><img src="{{item.product.image.url}}" class="img-sm"></div>
+			<figcaption class="info">
+				<a href="{% url 'product-detail' item.product.slug %}" class="title text-dark">{{item.product.product_name}}</a>
+				<p class="text-muted small">
+					
+					{% if item.variation.all %}
+
+					
+					{% for value in item.variation.all %}
+						{{value.variation_category | title}} : {{value.variation_value}}<br> 
+					{% endfor %}
+						
+						
+					{% endif %}
+						
+				</p>
+			</figcaption>
+		</figure>
+	</td>
+	<td> 
+		<!-- col.// -->
+					<div class="col"> 
+						<div class="input-group input-spinner">
+							<div class="input-group-prepend">
+							<a href="{% url 'reduce' item.product.id %}" class="btn btn-light" type="button" id="button-plus"> <i class="fa fa-minus"></i> </a>
+							</div>
+							<input type="text" class="form-control"  value="{{item.quantity}}">
+							<div class="input-group-append">
+							<a href="{% url 'add-cart' item.product.id %}" class="btn btn-light" type="button" id="button-minus"> <i class="fa fa-plus"></i> </a>
+							</div>
+						</div> <!-- input-group.// -->
+					</div> <!-- col.// -->
+	</td>
+	<td> 
+		<div class="price-wrap"> 
+			<var class="price">${{item.get_amount|intcomma}}</var> 
+			<small class="text-muted"> ${{item.product.price|intcomma}} each </small> 
+		</div> <!-- price-wrap .// -->
+	</td>
+	<td class="text-right"> 
+	<a href="{% url 'remove' item.product.id %}" class="btn btn-danger"> Remove</a>
+	</td>
+</tr>
+{% endfor %}
+
+{% else %}
+<h3 class="text-gray text-center pt-3 pb-3"> Shopping Cart is Empty </h3>
+<div align="center">
+
+	<a href="{% url 'store' %}" class="btn btn-block btn-primary w-25"> Continue Shopping </a>
+</div>
+
+
+
+</tbody>
+{% endif %}
+</table>
+</div> <!-- card.// -->
+
+	</aside> <!-- col.// -->
+	<aside class="col-lg-3">
+
+		<div class="card">
+		<div class="card-body">
+			<dl class="dlist-align">
+			  <dt>Total price:</dt>
+			  <dd class="text-right">${{total|intcomma}}.00</dd>
+			</dl>
+			<dl class="dlist-align">
+			  <dt>Tax:</dt>
+			  <dd class="text-right"> ${{tax|intcomma}}</dd>
+			</dl>
+			<dl class="dlist-align">
+			  <dt>Total:</dt>
+			  <dd class="text-right text-dark b"><strong>${{grandTotal|intcomma}}.00</strong></dd>
+			</dl>
+			<hr>
+			<p class="text-center mb-3">
+				<img src="{% static './images/misc/payments.png' %}" height="26">
+			</p>
+			<a href="./place-order.html" class="btn btn-primary btn-block"> Checkout </a>
+			<a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
+		</div> <!-- card-body.// -->
+		</div> <!-- card.// -->
+
+</aside> <!-- col.// -->
+
+
+</div> <!-- row.// -->
+<!-- ============================ COMPONENT 1 END .// ================================= -->
+
+</div> <!-- container .//  -->
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+{% endblock %}
