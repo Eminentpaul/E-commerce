@@ -9,12 +9,13 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=50, null=True)
     email = models.EmailField(unique=True, null=True)
     phone_number = models.CharField(max_length=20, null=True)
-    image = models.ImageField(upload_to='profile/', blank=True)
+    image = models.ImageField(upload_to='profile/', blank=True, null=True)
+    is_active = models.BooleanField(default=False)
     
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     
-    def __str__(self):
-        return self.username
+    def __unicode__(self):
+        return self.first_name
     

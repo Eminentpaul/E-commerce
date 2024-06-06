@@ -156,7 +156,7 @@
 					<a href="{% url 'add-cart' product.id %}" class="btn btn-block btn-primary" > Add to cart </a>
 
 					{% else %}
-					<a href="{% url 'product-detail' product.slug %}" class="btn btn-block btn-info" > View Details </a>
+					<a href="{% url 'product-detail' product.slug %}" class="btn btn-block btn-danger" > View Details </a>
 				{% endif %}
 					
 			</figcaption>

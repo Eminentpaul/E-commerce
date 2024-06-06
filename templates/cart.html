@@ -98,15 +98,19 @@
 		<div class="card-body">
 			<dl class="dlist-align">
 			  <dt>Total price:</dt>
-			  <dd class="text-right">${{total|intcomma}}.00</dd>
+			  <dd class="text-right">${{total|intcomma|floatformat:2}}</dd>
 			</dl>
 			<dl class="dlist-align">
-			  <dt>Tax:</dt>
-			  <dd class="text-right"> ${{tax|intcomma}}</dd>
+			  
+			  {% if cart_items %}
+				<dt>Tax:</dt>
+			  <dd class="text-right"> ${{tax|intcomma|floatformat:2}}</dd>
+			  {% endif %}
+				
 			</dl>
 			<dl class="dlist-align">
 			  <dt>Total:</dt>
-			  <dd class="text-right text-dark b"><strong>${{grandTotal|intcomma}}.00</strong></dd>
+			  <dd class="text-right text-dark b"><strong>${{grandTotal|intcomma|floatformat:2}}</strong></dd>
 			</dl>
 			<hr>
 			<p class="text-center mb-3">
