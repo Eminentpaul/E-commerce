@@ -5,10 +5,12 @@ from .models import User
 from store.models import Product
 from django.db.models import Q
 from category.models import Category
+from carts.models import Cart, CartItem
 from .utils import _number
 from .forms import RegistrationForm
 from django.contrib import messages as mg
 from django.contrib.auth.decorators import login_required
+import requests
 
 # verification email
 from django.contrib.sites.shortcuts import get_current_site
@@ -18,6 +20,7 @@ from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage, get_connection
 from django.conf import settings
+from carts.utils import _cart_id
 
 # Create your views here.
 
@@ -62,7 +65,7 @@ def register(request):
 
         if form.is_valid():
             user = form.save(commit=False)
-            user.is_active = True 
+            user.is_active = True
             user.save()
             # auth.login(request, user)
 
@@ -114,11 +117,31 @@ def login(request):
         # user = auth.authenticate(
         #     email=email, password=password, is_active=True)
 
-        print(user, password, email)
-
         if user is not None:
+            try:
+                cart = Cart.objects.get(cart_id=_cart_id(request))
+                is_cart_exist = CartItem.objects.filter(cart=cart).exists()
+
+                if is_cart_exist:
+                    cart_item = CartItem.objects.all()
+
+                    for item in cart_item:
+                        item.user = user
+                        item.save()
+            except:
+                pass
+
             auth.login(request, user)
-            return redirect('home')
+
+            url = request.META.get('HTTP_REFERER')
+
+            try:
+                query = requests.utils.urlparse(url).query
+                params = dict(x.split('=') for x in query.split('&'))   
+                if 'next' in params:
+                    nextPage = params['next']
+                    return redirect(nextPage)
+            except: return redirect('dashboard')
 
         else:
             mg.error(request, 'Invalid Email or Password!')

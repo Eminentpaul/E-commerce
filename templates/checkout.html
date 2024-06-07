@@ -12,16 +12,58 @@
 <!-- ============================ COMPONENT 1 ================================= -->
 
 <div class="row">
-	<aside class="col-lg-9">
+	<aside class="col-lg-6">
 <div class="card">
-<table class="table table-borderless table-shopping-cart">
+    <div class='card-body'>
+        <h3>Billing Address</h3>
+        <form action="" method="post">
+        {% csrf_token %} {% include 'message.html' %}
+
+        <div class="form-row">
+          <div class="col form-group">
+            <label class="fw-bold form-label"
+              >First Name</label
+            >
+            <input name='first_name' required placeholder='First Name' class='form-control'>
+          </div>
+          <!-- form-group end.// -->
+          <div class="col form-group">
+            <label class="fw-bold form-label"
+              >Last Name</label
+            >
+            <input name='last_name' required placeholder='Last Name' class='form-control'>
+          </div>
+          <!-- form-group end.// -->
+        </div>
+        <!-- form-row end.// -->
+
+        <div class="form-row">
+          
+            <label class="fw-bold form-label"
+              >Address</label
+            >
+            <input name='address' required placeholder='Residential Address' class='form-control'>
+
+        </div>
+        
+        <!-- form-group// -->
+      
+    </div>
+</div> <!-- card.// -->
+
+	</aside> <!-- col.// -->
+	<aside class="col-lg-6">
+
+		<div class="card">
+		<div class="card-body">
+			<table class="table table-borderless table-shopping-cart">
 <thead class="text-muted">
 <tr class="small text-uppercase">
-	{% if cart_items.count %}
+
   <th scope="col">Product</th>
   <th scope="col" width="120">Quantity</th>
   <th scope="col" width="120">Price</th>
-  <th scope="col" class="text-right" width="200"> </th>
+  
 </tr>
 </thead>
 <tbody>
@@ -53,17 +95,9 @@
 	</td>
 	<td> 
 		<!-- col.// -->
-					<div class="col"> 
-						<div class="input-group input-spinner">
-							<div class="input-group-prepend">
-							<a href="{% url 'reduce' item.product.id %}" class="btn btn-light" type="button" id="button-plus"> <i class="fa fa-minus"></i> </a>
-							</div>
-							<input type="text" class="form-control"  value="{{item.quantity}}">
-							<div class="input-group-append">
-							<a href="{% url 'add-cart' item.product.id %}" class="btn btn-light" type="button" id="button-minus"> <i class="fa fa-plus"></i> </a>
-							</div>
-						</div> <!-- input-group.// -->
-					</div> <!-- col.// -->
+					
+							<input type="text" class="form-control" readonly  value="{{item.quantity}}">
+							 <!-- col.// -->
 	</td>
 	<td> 
 		<div class="price-wrap"> 
@@ -71,43 +105,13 @@
 			<small class="text-muted"> ${{item.product.price|intcomma}} each </small> 
 		</div> <!-- price-wrap .// -->
 	</td>
-	<td class="text-right"> 
-	<a href="{% url 'remove' item.product.id %}" class="btn btn-danger"> Remove</a>
-	</td>
+	
 </tr>
 {% endfor %}
 
-{% else %}
-<h3 class="text-gray text-center pt-3 pb-3"> Shopping Cart is Empty </h3>
-<div align="center">
-
-	<a href="{% url 'store' %}" class="btn btn-block btn-primary w-25"> Continue Shopping </a>
-</div>
-
-
 
 </tbody>
-{% endif %}
 </table>
-</div> <!-- card.// -->
-
-	</aside> <!-- col.// -->
-	<aside class="col-lg-3">
-
-		<div class="card">
-		<div class="card-body">
-			<dl class="dlist-align">
-			  <dt>Total price:</dt>
-			  <dd class="text-right">${{total|intcomma|floatformat:2}}</dd>
-			</dl>
-			<dl class="dlist-align">
-			  
-			  {% if cart_items %}
-				<dt>Tax:</dt>
-			  <dd class="text-right"> ${{tax|intcomma|floatformat:2}}</dd>
-			  {% endif %}
-				
-			</dl>
 			<dl class="dlist-align">
 			  <dt>Total:</dt>
 			  <dd class="text-right text-dark b"><strong>${{grandTotal|intcomma|floatformat:2}}</strong></dd>
@@ -116,8 +120,9 @@
 			<p class="text-center mb-3">
 				<img src="{% static './images/misc/payments.png' %}" height="26">
 			</p>
-			<a href="{% url 'checkout' %}" class="btn btn-primary btn-block"> Checkout </a>
+			<button type='submit' class="btn btn-primary btn-block"> Place Order </button>
 			<a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
+            </form>
 		</div> <!-- card-body.// -->
 		</div> <!-- card.// -->
 
